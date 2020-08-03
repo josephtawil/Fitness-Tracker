@@ -155,6 +155,12 @@ module.exports ={
   getWorkout: (req,res) => {
     Workout.find({}).then((workout) => res.send(workout))
     .catch((err)=>res.send(err));
-  }
+  },
+
+  createWorkout: (req,res) => {
+    Workout.create({exercise: req.body}).then((workout) => res.send(workout))
+    .catch((err)=>res.send(err));
+  },
+  
 };
 

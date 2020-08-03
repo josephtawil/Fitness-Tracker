@@ -14,10 +14,10 @@ const exerciseSchema = new Schema({
 
 const workoutSchema = new Schema({
 
-    day: {
-        type: Date,
-        required: true,
-    },
+    // day: {
+    //     type: Date,
+    //     required: true,
+    // },
     
     exercise: [exerciseSchema],
 
