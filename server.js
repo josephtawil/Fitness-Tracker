@@ -7,7 +7,8 @@ app.use(express.static('public'));
 app.use(express.json());
 
 const clientRouter = require('./routes/client-routes');
-app.use(clientRouter);
+const apiRouter = require("./routes/api-routes");
+app.use(clientRouter, apiRouter);
 
 app.listen(PORT, ()=>{
     console.log(`Listening at http://localhost:${PORT}`);
