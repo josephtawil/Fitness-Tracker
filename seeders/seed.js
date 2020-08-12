@@ -165,7 +165,7 @@ module.exports ={
           .catch((err) => res.send(err));
   },
 
-  newWorkout: (req, res) => {
+  createWorkout: (req, res) => {
     Workout.create(req.body)
       .then((workout) => {
         res.send(workout);
@@ -176,32 +176,10 @@ module.exports ={
   },
 
   addExercise: async (req, res) => {
-    try {
-      // set a variable to easily access the current workout
-      const workout = await Workout.findById(req.params.id);
-
-      // push the new exercise to the workout
-      workout.exercises.push(req.body);
-
-      // forEach loop accesses the duration of each exercise and adds them up
-      let totalDuration = 0;
-      await workout.exercises.forEach((exercise) => {
-        totalDuration += exercise.duration;
-      });
-
-      // assign the variable to the object key's value
-      workout.totalDuration = totalDuration;
-
-      // save the workout with the new exercise in it
-      await workout.save();
-
-      // send something so the request doesn't hang up
+    
+    Workout.findByIdAndUpdate(req.params.id, {$push :{exercises: req.body}}, {totalDuration: req.body.duration}).then((workout) => {
       res.send(workout);
-    } catch (error) {
-      res.send(error);
-    }
-  },
-
-  
+    }).catch((err)=> res.send(err));
+  },  
 };
 
