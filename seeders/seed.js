@@ -152,15 +152,56 @@ module.exports ={
     });
   },
 
-  getWorkout: (req,res) => {
-    Workout.find({}).then((workout) => res.send(workout))
-    .catch((err)=>res.send(err));
+  getWorkout: (req, res) => {
+    //if there is no id then we return all workouts
+    !req.query.id
+      ? 
+        Workout.find({})
+          .then((allWorkouts) => res.send(allWorkouts))
+          .catch((err) => res.send(err))
+      : //otherwise we return the workout based on its id
+        Workout.findById(req.query.id)
+          .then((foundWorkout) => res.send(foundWorkout))
+          .catch((err) => res.send(err));
   },
 
-  createWorkout: (req,res) => {
-    Workout.create({exercise: req.body}).then((workout) => res.send(workout))
-    .catch((err)=>res.send(err));
+  newWorkout: (req, res) => {
+    Workout.create(req.body)
+      .then((workout) => {
+        res.send(workout);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
   },
+
+  addExercise: async (req, res) => {
+    try {
+      // set a variable to easily access the current workout
+      const workout = await Workout.findById(req.params.id);
+
+      // push the new exercise to the workout
+      workout.exercises.push(req.body);
+
+      // forEach loop accesses the duration of each exercise and adds them up
+      let totalDuration = 0;
+      await workout.exercises.forEach((exercise) => {
+        totalDuration += exercise.duration;
+      });
+
+      // assign the variable to the object key's value
+      workout.totalDuration = totalDuration;
+
+      // save the workout with the new exercise in it
+      await workout.save();
+
+      // send something so the request doesn't hang up
+      res.send(workout);
+    } catch (error) {
+      res.send(error);
+    }
+  },
+
   
 };
 
