@@ -1,7 +1,6 @@
 let mongoose = require("mongoose");
 let Workout = require("../models/workout");
 
-mongodb+srv://josephtawil:yuseffufu1997@cluster0.g0ag4.mongodb.net/<dbname>?retryWrites=true&w=majority
 
 mongoose.connect(process.env.MONGODB_URL || "mongodb://localhost/workout", {
   useNewUrlParser: true,
